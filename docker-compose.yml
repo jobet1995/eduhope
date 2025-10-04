@@ -28,7 +28,9 @@ services:
 
   # Nginx Reverse Proxy
   nginx:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     container_name: eduhope-nginx
     restart: unless-stopped
     ports:
@@ -39,6 +41,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      - nginx-cache:/var/cache/nginx
     depends_on:
       - app
     networks:
@@ -58,7 +61,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
       - ./data/certbot/scripts:/scripts
-    entrypoint: '/bin/sh -c ''trap exit TERM; while :; do certbot renew --quiet --deploy-hook "nginx -s reload"; sleep 12h & wait $${!}; done;'''
+    entrypoint: '/bin/sh -c ''trap exit TERM; while :; do certbot renew --quiet --deploy-hook "docker-compose exec nginx nginx -s reload"; sleep 12h & wait $${!}; done;'''
     depends_on:
       - nginx
     networks:
@@ -70,5 +73,6 @@ networks:
     driver: bridge
 
 volumes:
+  nginx-cache:
   certbot-etc:
   certbot-www:
