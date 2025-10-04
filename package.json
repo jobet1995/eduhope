@@ -9,7 +9,8 @@
     "lint": "eslint",
     "type-check": "tsc --noEmit",
     "prepare": "husky",
-    "test": "jest"
+    "test": "jest",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -68,6 +69,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.3.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "husky": "^9.1.7",
