@@ -1,58 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduHope - Non-Profit Website
 
-## Getting Started
+A modern, high-performance website built with Next.js, served through Nginx with SSL termination, and containerized with Docker.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js 14 with App Router
+- SSL/TLS encryption with automatic certificate renewal
+- Docker containerization
+- Reverse proxy with Nginx
+- Optimized production builds
+- SEO optimized
+- Fully responsive design
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prerequisites
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Node.js 18+ & npm 9+ or Yarn 1.22+
+- Docker 20.10+ & Docker Compose 2.0+
+- Git 2.30+
+
+## Quick Start
+
+### Local Development
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/eduhope.git
+   cd eduhope
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Start the development server**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Docker Setup
 
-### Build the Docker Image
+### Development
 
-```bash
-docker build -t eduhope .
+1. **Build and start the containers**
+
+   ```bash
+   docker-compose up --build
+   ```
+
+2. The application will be available at [http://localhost](http://localhost)
+
+### Production
+
+1. **Build and start the production stack**
+
+   ```bash
+   docker-compose -f docker-compose.yml up --build -d
+   ```
+
+2. **Set up SSL certificates (first time only)**
+   Make the initialization script executable and run it with your domain and email:
+
+   ```bash
+   chmod +x init-letsencrypt.sh
+   ./init-letsencrypt.sh example.com your-email@example.com
+   ```
+
+   > **Note:** For testing, you can use the `--staging` flag in the script to avoid hitting rate limits.
+
+3. **Verify the certificate**
+   Check if the certificate was installed correctly:
+
+   ```bash
+   docker-compose exec nginx nginx -t
+   ```
+
+4. **Auto-renewal**
+   The Certbot container will automatically renew certificates before they expire. You can test the renewal process with:
+   ```bash
+   docker-compose run --rm certbot renew --dry-run
+   ```
+
+## Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+NEXT_PUBLIC_API_URL=https://api.example.com
+NODE_ENV=development
 ```
 
-### Run the Container
+### Nginx Configuration
 
-```bash
-docker run -p 3000:3000 eduhope
-```
+- Main config: `nginx/nginx.conf`
+- Site config: `nginx/conf.d/app.conf`
 
-### Using Docker Compose (Recommended for Development)
+## Deployment
 
-```bash
-docker-compose up --build
-```
+### Prerequisites
 
-The application will be available at http://localhost:3000
+- Domain name (e.g., example.com)
+- Server with Docker and Docker Compose installed
+- Ports 80 and 443 open
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Steps
 
-## Learn More
+1. **Clone the repository on your server**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone https://github.com/yourusername/eduhope.git
+   cd eduhope
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Set up environment variables**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   cp .env.example .env
+   nano .env  # Edit with your configuration
+   ```
 
-## Deploy on Vercel
+3. **Start the production stack**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Set up SSL certificates** (if not using Let's Encrypt)
+   - Place your SSL certificate and key in `./data/certbot/conf/live/example.com/`
+   - Update `nginx/conf.d/app.conf` with the correct paths
+
+## Security
+
+- Automatic HTTPS with Let's Encrypt
+- Security headers (CSP, HSTS, X-Frame-Options)
+- Rate limiting
+- Request size limits
+- Disabled server tokens
+
+## Monitoring
+
+Access logs are available at:
+
+- Nginx access logs: `./logs/nginx/access.log`
+- Nginx error logs: `./logs/nginx/error.log`
+- Application logs: `docker-compose logs -f app`
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Nginx Documentation](https://nginx.org/en/docs/)
+- [Docker Documentation](https://docs.docker.com/)
