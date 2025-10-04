@@ -218,21 +218,16 @@ Runs automatically on:
 
 Runs automatically when:
 
-- Code is pushed to the `staging` branch → Deploys to Vercel staging environment
 - Code is pushed to the `release` branch → Deploys to Vercel production environment
 - Code is pushed to the `master` branch → Deploys to Vercel production environment
 
 **CD Steps:**
 
-1. Deploy to appropriate Vercel environment (staging/production)
+1. Deploy to Vercel production environment
 2. Report deployment status
 3. Failed deployments block merge to protected branches
 
 ### Deployment
-
-#### Staging Deployment
-
-The application is automatically deployed to Vercel staging environment when code is pushed to the `staging` branch.
 
 #### Production Deployment
 
@@ -243,14 +238,6 @@ The application is automatically deployed to Vercel production environment when 
 ```env
 NEXT_PUBLIC_API_URL=https://api.eduhope.org
 NODE_ENV=production
-VERCEL_TOKEN=<your-vercel-token>
-```
-
-**Required Environment Variables for Staging:**
-
-```env
-NEXT_PUBLIC_API_URL=https://staging-api.eduhope.org
-NODE_ENV=staging
 VERCEL_TOKEN=<your-vercel-token>
 ```
 
