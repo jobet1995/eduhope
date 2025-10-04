@@ -191,7 +191,6 @@ This project uses GitHub Actions for continuous integration and continuous deplo
 - **`features`**: New feature development branches
 - **`develop`**: Integration branch for tested features
 - **`stagingTest`**: Testing branch for staging deployment
-- **`staging`**: Staging environment deployment
 - **`releaseTest`**: Testing branch for production deployment
 - **`release`**: Production deployment branch
 - **`master`**: Final production branch (protected)
@@ -202,8 +201,8 @@ This project uses GitHub Actions for continuous integration and continuous deplo
 
 Runs automatically on:
 
-- Pull requests to `develop`, `stagingTest`, `staging`, `releaseTest`, `release`, and `master` branches
-- Pushes to `develop`, `stagingTest`, `staging`, `releaseTest`, `release`, and `master` branches
+- Pull requests to `develop`, `stagingTest`, `releaseTest`, `release`, and `master` branches
+- Pushes to `develop`, `stagingTest`, `releaseTest`, `release`, and `master` branches
 
 **CI Steps:**
 
